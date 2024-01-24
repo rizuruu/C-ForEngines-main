@@ -38619,7 +38619,7 @@ GameObject:
   - component: {fileID: 1353868545}
   - component: {fileID: 1353868544}
   - component: {fileID: 1353868543}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Obstacle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38712,7 +38712,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -38820,6 +38820,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerMaxSpeed: 200
+  m_bulletPrefab: {fileID: 1851148738744292001, guid: 94f8ff9bddba91944a4f34865c57ac4d, type: 3}
+  m_firePoint: {fileID: 0}
+  m_projectileSpeed: 5
 --- !u!50 &1861326229
 Rigidbody2D:
   serializedVersion: 4
