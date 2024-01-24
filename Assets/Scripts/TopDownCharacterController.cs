@@ -20,6 +20,10 @@ public class TopDownCharacterController : MonoBehaviour
     [Header("Movement parameters")]
     //The maximum speed the player can move
     [SerializeField] private float playerMaxSpeed = 100f;
+
+    [SerializeField] GameObject m_bulletPrefab;
+    [SerializeField] Transform m_firePoint;
+    [SerializeField] float m_projectileSpeed;
     #endregion
 
 
@@ -85,6 +89,19 @@ public class TopDownCharacterController : MonoBehaviour
         {
             //Shoot (well debug for now)
             Debug.Log($"Shoot! {Time.time}", gameObject);
+            Fire();
+        }
+    }
+
+    void Fire()
+    {
+        GameObject bulletToSpawn = Instantiate(m_bulletPrefab, transform.position, Quaternion.identity);
+        var bulletRB = bulletToSpawn.GetComponent<Rigidbody2D>();
+        if (bulletRB != null)
+        {
+            Vector2 mousePosition = Input.mousePosition;
+            Vector2 mousePointOnScreen = Camera.main.ScreenToWorldPoint(mousePosition);
+            bulletRB.AddForce(mousePointOnScreen.normalized * m_projectileSpeed, ForceMode2D.Impulse);
         }
     }
 }
