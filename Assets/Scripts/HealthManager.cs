@@ -7,7 +7,6 @@ public class HealthManager : MonoBehaviour
     public int maxHealth = 100;
 
     private int currentHealth;
-    public static HUDManager Instance { get; private set; }
 
     private void Start()
     {
@@ -51,4 +50,24 @@ public class HealthManager : MonoBehaviour
     {
         return currentHealth;
     }
+
+    public bool IsFull()
+    {
+        return currentHealth == maxHealth;
+    }
+
+    #region Instancer
+    private static HealthManager _Instance;
+    public static HealthManager Instance
+    {
+        get
+        {
+            if (_Instance == null)
+            {
+                _Instance = FindObjectOfType<HealthManager>();
+            }
+            return _Instance;
+        }
+    }
+    #endregion
 }

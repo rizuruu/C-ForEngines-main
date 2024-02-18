@@ -28,4 +28,19 @@ public class VFXManager : MonoBehaviour
 
         return explosion;
     }
+
+    public static GameObject SpawnEffect(GameObject fxObject, Vector3 position, float deathTime = 0.5f)
+    {
+        if (Instance == null)
+        {
+            Debug.Log("Tried to spawn an effect, but instance hasn't been set.");
+            return null;
+        }
+
+        GameObject fx = Instantiate(fxObject, position, Quaternion.identity);
+
+        Destroy(fx, deathTime);
+
+        return fx;
+    }
 }

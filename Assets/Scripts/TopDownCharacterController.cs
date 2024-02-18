@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TopDownCharacterController : MonoBehaviour
+public class TopDownCharacterController : MonoBehaviour, IDamageable
 {
     #region Framework Stuff
     //Reference to attached animator
@@ -24,6 +24,13 @@ public class TopDownCharacterController : MonoBehaviour
     [SerializeField] GameObject m_bulletPrefab;
     [SerializeField] Transform m_firePoint;
     [SerializeField] float m_projectileSpeed;
+
+    private Coroutine speedBoostCoroutine;
+    private float originalMaxSpeed;
+
+    [Header("Damage Properties")]
+    [SerializeField] float flashDuration = 0.5f;
+    [SerializeField] float flashCount = 3;
     #endregion
 
 
@@ -106,5 +113,52 @@ public class TopDownCharacterController : MonoBehaviour
             Vector2 mousePointOnScreen = Camera.main.ScreenToWorldPoint(mousePosition);
             bulletRB.AddForce(mousePointOnScreen.normalized * m_projectileSpeed, ForceMode2D.Impulse);
         }
+    }
+
+    public void BoostSpeed(float boostMultiplier, float duration)
+    {
+        if (speedBoostCoroutine != null)
+        {
+            StopCoroutine(speedBoostCoroutine); 
+        }
+        speedBoostCoroutine = StartCoroutine(BoostSpeedRoutine(boostMultiplier, duration));
+    }
+
+    private IEnumerator BoostSpeedRoutine(float boostMultiplier, float duration)
+    {
+        originalMaxSpeed = playerMaxSpeed; 
+        playerMaxSpeed *= boostMultiplier; 
+
+        yield return new WaitForSeconds(duration); 
+
+        playerMaxSpeed = originalMaxSpeed; 
+        speedBoostCoroutine = null; 
+    }
+
+    public void TakeDamage(int amount)
+    {
+        HealthManager.Instance.TakeDamage(amount);
+        FlashRedOnDamage();
+
+    }
+    private IEnumerator DamageFlashCoroutine()
+    {
+        var spriteRenderer = GetComponent<SpriteRenderer>();
+        float singleFlashDuration = flashDuration / (flashCount * 2); 
+
+        for (int i = 0; i < flashCount * 2; i++)
+        {
+            // Toggle color between original and red
+            spriteRenderer.color = spriteRenderer.color == Color.white ? Color.red : Color.white;
+
+            // Wait for half the duration of a single flash before toggling color
+            yield return new WaitForSeconds(singleFlashDuration);
+        }
+    }
+
+    public void FlashRedOnDamage()
+    {
+        StopCoroutine(DamageFlashCoroutine()); 
+        StartCoroutine(DamageFlashCoroutine()); 
     }
 }
