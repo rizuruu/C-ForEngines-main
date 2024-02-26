@@ -78,17 +78,15 @@ public abstract class AIBase : MonoBehaviour, IDamageable
     {
         if (enemyState == newState) return;
         enemyState = newState;
-
-        // Handling animation state change in the base class if common across all AI,
-        // or in derived classes for specific animations.
     }
 
-    protected virtual void Attack() { }
 
     protected abstract void OnPlayerDetected(Transform playerTransform);
     protected abstract void OnPlayerLost();
     protected abstract void OnPlayerInAttackRange();
 
+    protected virtual void Attack() { }
+    
     public virtual void TakeDamage(int amount) 
     {
         if (IsDead) return;
