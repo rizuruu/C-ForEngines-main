@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +7,7 @@ public class HealthManager : MonoBehaviour
     public int maxHealth = 100;
 
     private int currentHealth;
+    public static event Action OnPlayerDeath;
 
     private void Start()
     {
@@ -44,6 +45,7 @@ public class HealthManager : MonoBehaviour
     void Die()
     {
         Debug.Log("Yikes, you dead!");
+        OnPlayerDeath?.Invoke();
     }
 
     public int GetHealth()
@@ -55,6 +57,8 @@ public class HealthManager : MonoBehaviour
     {
         return currentHealth == maxHealth;
     }
+
+    public bool IsDead() => currentHealth == 0;
 
     #region Instancer
     private static HealthManager _Instance;

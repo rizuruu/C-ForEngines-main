@@ -6,12 +6,11 @@ public class BoostPotionPickup : Pickup
 {
     public float speedMultiplier = 2f;
     public float duration = 5f;
-    public GameObject pickupFX;
 
     public override void OnPickup(TopDownCharacterController player)
     {
+        SoundManager.Play("Pickup");
         player.BoostSpeed(speedMultiplier, duration);
-        VFXManager.SpawnEffect(pickupFX, player.gameObject.transform.position);
         Destroy();
     }
 }

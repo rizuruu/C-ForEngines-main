@@ -9,7 +9,7 @@ public class EnemyController : MonoBehaviour
 
     private Transform m_Player;
     private bool m_PlayerInSight = false;
-    private EnemyStates m_enemyStates = EnemyStates.Idle;
+    private EnemyState m_enemyStates = EnemyState.Idle;
 
     private void Start()
     {
@@ -20,13 +20,13 @@ public class EnemyController : MonoBehaviour
     {
         switch (m_enemyStates)
         {
-            case EnemyStates.Idle:
+            case EnemyState.Idle:
                 // Idle State
                 break;
-            case EnemyStates.Chasing:
+            case EnemyState.Chasing:
                 ChasePlayer();
                 break;
-            case EnemyStates.Attacking:
+            case EnemyState.Attacking:
                 // Attack state
                 break;
         }
@@ -45,7 +45,7 @@ public class EnemyController : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             m_PlayerInSight = true;
-            m_enemyStates = EnemyStates.Chasing; 
+            m_enemyStates = EnemyState.Chasing; 
         }
     }
 
@@ -54,7 +54,7 @@ public class EnemyController : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             m_PlayerInSight = false;
-            m_enemyStates = EnemyStates.Idle; 
+            m_enemyStates = EnemyState.Idle; 
         }
     }
 }

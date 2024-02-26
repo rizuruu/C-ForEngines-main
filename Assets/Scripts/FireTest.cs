@@ -33,7 +33,6 @@ public class FireTest : MonoBehaviour
         while (true)
         {
             damageable.TakeDamage(damageAmount);
-            CameraShake.DoShake();
             yield return new WaitForSeconds(damageInterval);
         }
     }

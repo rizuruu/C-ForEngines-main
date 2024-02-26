@@ -10,6 +10,7 @@ public class HealthPickup : Pickup
         var healthManager = HealthManager.Instance;
         if (!healthManager.IsFull())
         {
+            SoundManager.Play("Pickup");
             healthManager.Heal(healAmount);
             Destroy();
         }

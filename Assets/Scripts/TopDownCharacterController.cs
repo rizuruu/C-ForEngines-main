@@ -111,7 +111,13 @@ public class TopDownCharacterController : MonoBehaviour, IDamageable
         {
             Vector2 mousePosition = Input.mousePosition;
             Vector2 mousePointOnScreen = Camera.main.ScreenToWorldPoint(mousePosition);
-            bulletRB.AddForce(mousePointOnScreen.normalized * m_projectileSpeed, ForceMode2D.Impulse);
+
+            // Calculate the angle for the direction/rotation
+            Vector2 direction = (mousePointOnScreen - (Vector2)transform.position).normalized;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            bulletToSpawn.transform.rotation = Quaternion.Euler(0, 0, angle);
+
+            bulletRB.AddForce(direction.normalized * m_projectileSpeed, ForceMode2D.Impulse);
         }
     }
 
@@ -126,6 +132,8 @@ public class TopDownCharacterController : MonoBehaviour, IDamageable
 
     private IEnumerator BoostSpeedRoutine(float boostMultiplier, float duration)
     {
+        GameObject fx = VFXManager.SpawnPotionEffect(gameObject.transform, duration);
+
         originalMaxSpeed = playerMaxSpeed; 
         playerMaxSpeed *= boostMultiplier; 
 
@@ -133,32 +141,14 @@ public class TopDownCharacterController : MonoBehaviour, IDamageable
 
         playerMaxSpeed = originalMaxSpeed; 
         speedBoostCoroutine = null; 
+        Destroy(fx);
     }
 
     public void TakeDamage(int amount)
     {
         HealthManager.Instance.TakeDamage(amount);
-        FlashRedOnDamage();
-
-    }
-    private IEnumerator DamageFlashCoroutine()
-    {
-        var spriteRenderer = GetComponent<SpriteRenderer>();
-        float singleFlashDuration = flashDuration / (flashCount * 2); 
-
-        for (int i = 0; i < flashCount * 2; i++)
-        {
-            // Toggle color between original and red
-            spriteRenderer.color = spriteRenderer.color == Color.white ? Color.red : Color.white;
-
-            // Wait for half the duration of a single flash before toggling color
-            yield return new WaitForSeconds(singleFlashDuration);
-        }
-    }
-
-    public void FlashRedOnDamage()
-    {
-        StopCoroutine(DamageFlashCoroutine()); 
-        StartCoroutine(DamageFlashCoroutine()); 
+        CameraShake.DoShake();
+        VFXManager.PlayDamageEffect(gameObject);
+        SoundManager.PlayRandom("TakeDamage");
     }
 }
