@@ -73,6 +73,7 @@ public class AI_IntellectDevourer : AIBase
         GetComponents<Collider2D>().ToList().ForEach(collider => collider.enabled = false);
         ChangeState(EnemyState.Dead); 
         anim.SetTrigger("Dead"); 
-        agent.isStopped = true;                                 
+        agent.isStopped = true;
+        Destroy(gameObject, 2f);
     }
 }

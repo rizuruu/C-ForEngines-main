@@ -67,6 +67,9 @@ public class TopDownCharacterController : MonoBehaviour, IDamageable
     /// </summary>
     private void Update()
     {
+        if (GameManager.Instance.IsGamePaused)
+            return;
+
         // read input from WASD keys
         playerDirection.x = Input.GetAxis("Horizontal");
         playerDirection.y = Input.GetAxis("Vertical");
@@ -97,8 +100,7 @@ public class TopDownCharacterController : MonoBehaviour, IDamageable
         // Was the fire button pressed (mapped to Left mouse button or gamepad trigger)
         if (Input.GetButtonDown("Fire1"))
         {
-            //Shoot (well debug for now)
-            Debug.Log($"Shoot! {Time.time}", gameObject);
+            //Shoot
             Fire();
         }
     }

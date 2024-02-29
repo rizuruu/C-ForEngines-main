@@ -18,21 +18,21 @@ public class SoundManager : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
-    public static void Play(string soundName)
-    {
-        if (!ValidateInstance()) return;
-
-        var sound = Instance.sounds.Find(x => x.Name == soundName);
-        if (sound == null) return;
-
-        Instance.audioSource.PlayOneShot(sound.soundFile, sound.volume);
-    }
-
     public static void Play(int index)
     {
         if (!ValidateInstance()) return;
 
         var sound = Instance.sounds[index];
+        if (sound == null) return;
+
+        Instance.audioSource.PlayOneShot(sound.soundFile, sound.volume);
+    }
+
+    public static void Play(string soundName)
+    {
+        if (!ValidateInstance()) return;
+
+        var sound = Instance.sounds.Find(x => x.Name == soundName);
         if (sound == null) return;
 
         Instance.audioSource.PlayOneShot(sound.soundFile, sound.volume);
